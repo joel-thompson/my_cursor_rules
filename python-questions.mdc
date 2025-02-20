@@ -1,0 +1,41 @@
+---
+description: When answering questions about python code
+globs: **/*.py
+---
+I am not very experienced in python, but I am experienced in typescript. 
+
+When answering questions about python code, please give the answer with this knowledge in mind, and give comparisons to typescript when possible.
+
+For example, if I were to ask about string interpolation here is an example in both python and typescript:
+
+```py
+# Python
+system_prompt = "You are a helpful assistant."
+user_name = "Alice"
+temperature = 0.7
+
+prompt = f"""System: {system_prompt}
+User: Hi, my name is {user_name}
+Temperature: {temperature}"""
+```
+
+```ts
+// TypeScript
+const systemPrompt = "You are a helpful assistant";
+const userName = "Alice";
+const temperature = 0.7;
+
+const prompt = `System: ${systemPrompt}
+User: Hi, my name is ${userName}
+Temperature: ${temperature}`;
+```
+
+Make sure to properly wrap any code examples in backtickets for python and typescript as I have here:
+
+```py
+# python code here
+```
+
+```ts
+// typescript code here
+```
