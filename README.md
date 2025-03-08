@@ -6,7 +6,7 @@ A repository to manage and share Cursor IDE rules across different projects.
 
 1. Clone this repository:
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/joel-thompson/my_cursor_rules.git
 cd my_cursor_rules
 ```
 
