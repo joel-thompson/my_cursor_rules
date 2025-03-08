@@ -52,7 +52,7 @@ fi
 # Check if a rule file name was provided
 if [ $# -eq 0 ]; then
     echo "Error: Please provide a rule file name"
-    echo "Usage: $0 <rule-file-name> or $0 -list"
+    echo "Usage: copy-to-project.sh <rule-file-name> or copy-to-project.sh -list"
     exit 1
 fi
 
