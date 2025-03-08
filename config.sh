@@ -1,1 +1,0 @@
-export pathToMyCursorRules="/Users/Joel/src/my_cursor_rules/"
