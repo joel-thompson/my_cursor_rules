@@ -24,17 +24,21 @@ fi
 # Array of accepted file extensions
 acceptedExtensions=(".mdc")
 
-# Function to list all rule files
+# Function to list all local rule files
 list_rules() {
-    echo "Available rule files:"
+    echo "Available local rule files:"
     for ext in "${acceptedExtensions[@]}"; do
-        find "$pathToMyCursorRules" -type f -name "*$ext" -exec basename {} \;
+        find ".cursor/rules" -type f -name "*$ext" -exec basename {} \; 2>/dev/null
     done
     exit 0
 }
 
 # Check for list parameter
 if [ "$1" = "-list" ]; then
+    if [ ! -d ".cursor/rules" ]; then
+        echo "Error: No .cursor/rules directory found in current project"
+        exit 1
+    fi
     list_rules
 fi
 
@@ -46,10 +50,15 @@ if [ $# -eq 0 ]; then
 fi
 
 ruleFile="$1"
-sourceFile="${pathToMyCursorRules}${ruleFile}"
-targetDir=".cursor/rules"
-absoluteTargetDir="$(pwd)/$targetDir"
-targetFile="${targetDir}/${ruleFile}"
+sourceDir=".cursor/rules"
+sourceFile="${sourceDir}/${ruleFile}"
+targetFile="${pathToMyCursorRules}${ruleFile}"
+
+# Check if .cursor/rules exists in current project
+if [ ! -d "$sourceDir" ]; then
+    echo "Error: No .cursor/rules directory found in current project"
+    exit 1
+fi
 
 # Validate file extension
 valid_extension=false
@@ -67,23 +76,13 @@ fi
 
 # Check if source file exists
 if [ ! -f "$sourceFile" ]; then
-    echo "Error: Rule file '$ruleFile' not found in $pathToMyCursorRules"
+    echo "Error: Rule file '$ruleFile' not found in $sourceDir"
     exit 1
 fi
 
-# Check if .cursor/rules directory exists and create if needed
-if [ ! -d "$targetDir" ]; then
-    read -p "Directory '$absoluteTargetDir' does not exist. Create it? (y/n): " confirm
-    if [[ $confirm != [yY] ]]; then
-        echo "Operation cancelled"
-        exit 0
-    fi
-    mkdir -p "$targetDir"
-fi
-
-# Check if target file already exists
+# Check if target file already exists in repo
 if [ -f "$targetFile" ]; then
-    read -p "File '$ruleFile' already exists in $targetDir. Overwrite? (y/n): " confirm
+    read -p "File '$ruleFile' already exists in $pathToMyCursorRules. Overwrite? (y/n): " confirm
     if [[ $confirm != [yY] ]]; then
         echo "Operation cancelled"
         exit 0
@@ -92,4 +91,4 @@ fi
 
 # Copy the file
 cp "$sourceFile" "$targetFile"
-echo "Successfully copied '$ruleFile' to $targetDir"
+echo "Successfully copied '$ruleFile' to $pathToMyCursorRules"
