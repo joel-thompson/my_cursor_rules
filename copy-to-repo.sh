@@ -64,6 +64,7 @@ ruleFile="$1"
 sourceDir=".cursor/rules"
 sourceFile="${sourceDir}/${ruleFile}"
 targetFile="${rulesDir}/${ruleFile}"
+isOverwrite=false
 
 # Check if .cursor/rules exists in current project
 if [ ! -d "$sourceDir" ]; then
@@ -98,8 +99,35 @@ if [ -f "$targetFile" ]; then
         echo "Operation cancelled"
         exit 0
     fi
+    isOverwrite=true
 fi
 
 # Copy the file
 cp "$sourceFile" "$targetFile"
 echo "Successfully copied '$ruleFile' to $rulesDir"
+
+# Handle git operations
+if [ "$isOverwrite" = true ]; then
+    commitMessage="updated $ruleFile"
+else
+    commitMessage="added $ruleFile"
+fi
+
+read -p "Would you like to commit and push this change? (y/n): " gitConfirm
+if [[ $gitConfirm == [yY] ]]; then
+    # Save current directory and change to repository root
+    currentDir=$(pwd)
+    cd "$pathToMyCursorRules"
+    
+    # Add and commit the file
+    git add "rules/$ruleFile"
+    git commit -m "$commitMessage"
+    
+    # Push to current branch
+    currentBranch=$(git rev-parse --abbrev-ref HEAD)
+    git push origin "$currentBranch"
+    
+    # Return to original directory
+    cd "$currentDir"
+    echo "Changes committed and pushed to branch: $currentBranch"
+fi
