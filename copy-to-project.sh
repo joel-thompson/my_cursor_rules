@@ -1,9 +1,13 @@
 #!/bin/bash
 
+# Get the directory where the script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 # Load configuration
-CONFIG_FILE="config.sh"
+CONFIG_FILE="$SCRIPT_DIR/config.sh"
 if [ ! -f "$CONFIG_FILE" ]; then
-    echo "Error: Configuration file not found. Please copy config.template.sh to config.sh and set your repository path."
+    echo "Error: Configuration file not found at $CONFIG_FILE"
+    echo "Please copy config.template.sh to config.sh and set your repository path."
     exit 1
 fi
 
@@ -15,9 +19,16 @@ if [ -z "$pathToMyCursorRules" ]; then
     exit 1
 fi
 
-# Check if rules repository exists
+# Check if repository exists
 if [ ! -d "$pathToMyCursorRules" ]; then
     echo "Error: Rules repository not found at $pathToMyCursorRules"
+    exit 1
+fi
+
+# Check if rules directory exists
+rulesDir="${pathToMyCursorRules}rules"
+if [ ! -d "$rulesDir" ]; then
+    echo "Error: Rules directory not found at $rulesDir"
     exit 1
 fi
 
@@ -28,7 +39,7 @@ acceptedExtensions=(".mdc")
 list_rules() {
     echo "Available rule files:"
     for ext in "${acceptedExtensions[@]}"; do
-        find "$pathToMyCursorRules" -type f -name "*$ext" -exec basename {} \;
+        find "$rulesDir" -type f -name "*$ext" -exec basename {} \;
     done
     exit 0
 }
@@ -46,7 +57,7 @@ if [ $# -eq 0 ]; then
 fi
 
 ruleFile="$1"
-sourceFile="${pathToMyCursorRules}${ruleFile}"
+sourceFile="${rulesDir}/${ruleFile}"
 targetDir=".cursor/rules"
 absoluteTargetDir="$(pwd)/$targetDir"
 targetFile="${targetDir}/${ruleFile}"
@@ -67,7 +78,7 @@ fi
 
 # Check if source file exists
 if [ ! -f "$sourceFile" ]; then
-    echo "Error: Rule file '$ruleFile' not found in $pathToMyCursorRules"
+    echo "Error: Rule file '$ruleFile' not found in $rulesDir"
     exit 1
 fi
 

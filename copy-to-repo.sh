@@ -1,9 +1,13 @@
 #!/bin/bash
 
+# Get the directory where the script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 # Load configuration
-CONFIG_FILE="config.sh"
+CONFIG_FILE="$SCRIPT_DIR/config.sh"
 if [ ! -f "$CONFIG_FILE" ]; then
-    echo "Error: Configuration file not found. Please copy config.template.sh to config.sh and set your repository path."
+    echo "Error: Configuration file not found at $CONFIG_FILE"
+    echo "Please copy config.template.sh to config.sh and set your repository path."
     exit 1
 fi
 
@@ -18,6 +22,13 @@ fi
 # Check if rules repository exists
 if [ ! -d "$pathToMyCursorRules" ]; then
     echo "Error: Rules repository not found at $pathToMyCursorRules"
+    exit 1
+fi
+
+# Check if rules directory exists
+rulesDir="${pathToMyCursorRules}rules"
+if [ ! -d "$rulesDir" ]; then
+    echo "Error: Rules directory not found at $rulesDir"
     exit 1
 fi
 
@@ -52,7 +63,7 @@ fi
 ruleFile="$1"
 sourceDir=".cursor/rules"
 sourceFile="${sourceDir}/${ruleFile}"
-targetFile="${pathToMyCursorRules}${ruleFile}"
+targetFile="${rulesDir}/${ruleFile}"
 
 # Check if .cursor/rules exists in current project
 if [ ! -d "$sourceDir" ]; then
@@ -82,7 +93,7 @@ fi
 
 # Check if target file already exists in repo
 if [ -f "$targetFile" ]; then
-    read -p "File '$ruleFile' already exists in $pathToMyCursorRules. Overwrite? (y/n): " confirm
+    read -p "File '$ruleFile' already exists in $rulesDir. Overwrite? (y/n): " confirm
     if [[ $confirm != [yY] ]]; then
         echo "Operation cancelled"
         exit 0
@@ -91,4 +102,4 @@ fi
 
 # Copy the file
 cp "$sourceFile" "$targetFile"
-echo "Successfully copied '$ruleFile' to $pathToMyCursorRules"
+echo "Successfully copied '$ruleFile' to $rulesDir"
