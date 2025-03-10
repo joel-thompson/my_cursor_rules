@@ -1,13 +1,17 @@
 ---
-description: Use repomix-output.md when answering any questions relating to the entire codebase
-globs: **/*
+description: Load repomix-output.md when analyzing codebase
+globs: 
 alwaysApply: false
 ---
 
-# {projectRoot}/repomix-output.md
+# When to load repomix-output.md
 
-this is the output of a tool called repomix. it formats the contents of a project into a single markdown file for use with LLMs. use this as a reference when making decisions or answering questions about the codebase.
+This rule determines when to load the repomix output file into the conversation context.
 
-Examples of when to use this:
-- answering questions about how to implement a feature
-- considering where to place a new file in the project
+Load this file ONLY when:
+- Analyzing overall project structure
+- Making architectural decisions
+- Planning where to place new features
+- Understanding project dependencies
+
+IMPORTANT: When the file is loaded, start your response with: "I used the repomix output."
