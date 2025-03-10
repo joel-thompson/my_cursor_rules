@@ -1,0 +1,13 @@
+---
+description: Use repomix-output.md when answering any questions relating to the entire codebase
+globs: **/*
+alwaysApply: false
+---
+
+# {projectRoot}/repomix-output.md
+
+this is the output of a tool called repomix. it formats the contents of a project into a single markdown file for use with LLMs. use this as a reference when making decisions or answering questions about the codebase.
+
+Examples of when to use this:
+- answering questions about how to implement a feature
+- considering where to place a new file in the project
