@@ -22,10 +22,15 @@ export pathToMyCursorRules="/path/to/your/my_cursor_rules/"  # Update this path
 
 4. Make the scripts executable:
 ```bash
-chmod +x copy-to-project.sh copy-to-repo.sh
+chmod +x copy-to-project.sh copy-to-repo.sh completion.sh
 ```
 
-5. (Optional) Add aliases to your shell:
+5. Enable tab completion by adding this line to your `~/.bashrc`, `~/.zshrc`, or equivalent:
+```bash
+source "/path/to/my_cursor_rules/completion.sh"  # Update this path
+```
+
+6. (Optional) Add aliases to your shell:
 
 Add these lines to your `~/.bashrc`, `~/.zshrc`, or equivalent:
 ```bash
@@ -46,6 +51,8 @@ crget my-rule.mdc   # Copy rule to current project
 crput -list         # List rules in current project
 crput my-rule.mdc   # Copy rule to repo
 ```
+
+Tab completion will work with both the full script names and the aliases.
 
 ## Usage
 
