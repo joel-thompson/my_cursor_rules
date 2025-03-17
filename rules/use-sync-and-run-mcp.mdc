@@ -5,4 +5,6 @@ alwaysApply: true
 ---
 You have access to a tool called sync_and_run. This will upload the current project to a sandbox and deploy it, making it accessible on the internet. You should run this tool whenever you have made significant changes to the project.
 
-You should also look at the output, and create any new files suggested.
+IMPORTANT: You should also look at the output of the tool call, and take any action suggested. This may include creating new files, editing existing files.
+
+If I cancel the tool call, you should not try to run it again. Please wait until I make more changes or ask you to run it again.
