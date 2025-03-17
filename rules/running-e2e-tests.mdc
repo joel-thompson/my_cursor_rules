@@ -1,0 +1,8 @@
+---
+description: always use pnpm test:e2e:ci to run e2e tsts
+globs: 
+alwaysApply: false
+---
+Whenever you need to run the e2e tests, you should use this command:
+
+`pnpm test:e2e:ci`
