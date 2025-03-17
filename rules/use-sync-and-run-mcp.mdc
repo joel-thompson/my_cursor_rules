@@ -1,0 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+You have access to a tool called sync_and_run. This will upload the current project to a sandbox and deploy it, making it accessible on the internet. You should run this tool whenever you have made significant changes to the project.
+
+You should also look at the output, and create any new files suggested.
