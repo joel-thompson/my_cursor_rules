@@ -30,7 +30,7 @@ User: Hi, my name is ${userName}
 Temperature: ${temperature}`;
 ```
 
-Make sure to properly wrap any code examples in backtickets for python and typescript as I have here:
+Make sure to properly wrap any code examples in backticks for python and typescript as I have here:
 
 ```py
 # python code here
