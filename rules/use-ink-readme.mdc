@@ -1,0 +1,8 @@
+---
+description: 
+globs: *.tsx,**/*.tsx
+alwaysApply: false
+---
+This project uses ink for the terminal UI.
+
+Here is the readme for the ink library: https://github.com/vadimdemedes/ink/blob/master/readme.md
