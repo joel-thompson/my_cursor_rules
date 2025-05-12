@@ -1,0 +1,70 @@
+---
+description: 
+globs: components/blog/*.tsx,app/posts/*/content.tsx,scripts/create-post.js
+alwaysApply: false
+---
+# Update Post Generator When Blog Components Change
+
+## Description
+When blog components are modified or new ones are added, make sure to update the blog post template generator script to keep it in sync with the latest components and features.
+
+## Details
+
+### Files To Monitor
+- `components/blog/*.tsx` - All blog components
+- `app/posts/*/content.tsx` - Existing post content files that may reveal component usage patterns
+- `scripts/create-post.js` - The template generator script
+
+### When To Apply This Rule
+- When adding a new blog component
+- When modifying the interface of an existing blog component
+- When changing the metadata structure for posts
+- When adding new features to the blog system
+
+### What To Update
+1. **Component Imports**: Ensure new components are imported in the template generator
+2. **Component Examples**: Add commented examples for any new components
+3. **Metadata Fields**: Keep the metadata object in sync with any changes to the metadata structure
+4. **Styling Changes**: Reflect any global style changes in the template
+
+### Testing After Updates
+After updating the script, test it by:
+1. Running `pnpm create-post "Test Post Title"`
+2. Checking that the generated files have the correct structure
+3. Verifying all imports and examples are up-to-date
+4. Testing that the generated post renders correctly
+5. Delete the test post after it is successful
+
+## Examples
+
+### When Adding A New Component
+If you add a new component like `BlogCallout`:
+
+```javascript
+// In scripts/create-post.js, update imports:
+import { BlogPost } from "@/components/blog/blog-post";
+import { BlogHeader } from "@/components/blog/blog-header";
+// ... other imports ...
+import { BlogCallout } from "@/components/blog/blog-callout";
+
+// Add an example in the template:
+{/* <BlogCallout type="info">
+  Important information goes here.
+</BlogCallout> */}
+```
+
+### When Changing Metadata Structure
+If you add a new metadata field like `coverImage`:
+
+```javascript
+// Update the metadata object in scripts/create-post.js:
+export const metadata = {
+  slug: "${slug}",
+  title: "${postTitle}",
+  date: "${format(new Date(), "yyyy-MM-dd")}",
+  excerpt: "A short description of your post goes here.",
+  readingTime: 5,
+  tags: ["tag1", "tag2"],
+  coverImage: "/images/${slug}/cover.jpg", // New field
+};
+``` 
