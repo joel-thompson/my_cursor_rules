@@ -1,0 +1,38 @@
+---
+description: When answering questions about python code
+globs: *.go,**/*.go
+alwaysApply: false
+---
+I am not very experienced in Go, but I am experienced in TypeScript.
+When answering questions about Go code, please give the answer with this knowledge in mind, and give comparisons to TypeScript when possible.
+For example, if I were to ask about string interpolation, here is an example in both Go and TypeScript:
+
+```go
+// Go
+systemPrompt := "You are a helpful assistant."
+userName := "Alice"
+temperature := 0.7
+
+prompt := fmt.Sprintf("System: %s\nUser: Hi, my name is %s\nTemperature: %v", systemPrompt, userName, temperature)
+```
+
+```ts
+// TypeScript
+const systemPrompt = "You are a helpful assistant";
+const userName = "Alice";
+const temperature = 0.7;
+
+const prompt = `System: ${systemPrompt}
+User: Hi, my name is ${userName}
+Temperature: ${temperature}`;
+```
+
+Make sure to properly wrap any code examples in backticks for python and typescript as I have here:
+
+```go
+// python code here
+```
+
+```ts
+// typescript code here
+```
