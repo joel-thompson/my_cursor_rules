@@ -25,21 +25,38 @@ if [ ! -d "$pathToMyCursorRules" ]; then
     exit 1
 fi
 
-# Check if rules directory exists
+# Default to cursor rules mode
+windsurfMode=false
+acceptedExtensions=(".mdc")
 rulesDir="${pathToMyCursorRules}rules"
-if [ ! -d "$rulesDir" ]; then
-    echo "Error: Rules directory not found at $rulesDir"
-    exit 1
+targetDir=".cursor/rules"
+
+# Check for windsurf flag
+if [ "$1" = "-w" ]; then
+    windsurfMode=true
+    acceptedExtensions=(".md")
+    rulesDir="${pathToMyCursorRules}windsurf-rules"
+    targetDir=".windsurf/rules"
+    shift # Remove the -w flag from the arguments
 fi
 
-# Array of accepted file extensions
-acceptedExtensions=(".mdc")
+# Check if rules directory exists
+if [ ! -d "$rulesDir" ]; then
+    # Create windsurf-rules directory if it doesn't exist
+    if [ "$windsurfMode" = true ]; then
+        mkdir -p "$rulesDir"
+        echo "Created windsurf rules directory at $rulesDir"
+    else
+        echo "Error: Rules directory not found at $rulesDir"
+        exit 1
+    fi
+fi
 
 # Function to list all rule files
 list_rules() {
-    echo "Available rule files:"
+    echo "Available $([ "$windsurfMode" = true ] && echo "windsurf" || echo "cursor") rule files:"
     for ext in "${acceptedExtensions[@]}"; do
-        find "$rulesDir" -type f -name "*$ext" -exec basename {} \;
+        find "$rulesDir" -type f -name "*$ext" -exec basename {} \; 2>/dev/null
     done
     exit 0
 }
@@ -52,13 +69,17 @@ fi
 # Check if a rule file name was provided
 if [ $# -eq 0 ]; then
     echo "Error: Please provide a rule file name"
-    echo "Usage: copy-to-project.sh <rule-file-name> or copy-to-project.sh -list"
+    if [ "$windsurfMode" = true ]; then
+        echo "Usage: copy-to-project.sh -w <rule-file-name> or copy-to-project.sh -w -list"
+    else
+        echo "Usage: copy-to-project.sh <rule-file-name> or copy-to-project.sh -list"
+        echo "For windsurf rules, use the -w flag: copy-to-project.sh -w <rule-file-name>"
+    fi
     exit 1
 fi
 
 ruleFile="$1"
 sourceFile="${rulesDir}/${ruleFile}"
-targetDir=".cursor/rules"
 absoluteTargetDir="$(pwd)/$targetDir"
 targetFile="${targetDir}/${ruleFile}"
 
@@ -72,7 +93,7 @@ for ext in "${acceptedExtensions[@]}"; do
 done
 
 if [ "$valid_extension" = false ]; then
-    echo "Error: Invalid file type. Accepted file types: ${acceptedExtensions[*]}"
+    echo "Error: Invalid file type. Accepted file types for $([ "$windsurfMode" = true ] && echo "windsurf" || echo "cursor") rules: ${acceptedExtensions[*]}"
     exit 1
 fi
 
@@ -82,7 +103,7 @@ if [ ! -f "$sourceFile" ]; then
     exit 1
 fi
 
-# Check if .cursor/rules directory exists and create if needed
+# Check if rules directory exists and create if needed
 if [ ! -d "$targetDir" ]; then
     read -p "Directory '$absoluteTargetDir' does not exist. Create it? (y/n): " confirm
     if [[ $confirm != [yY] ]]; then

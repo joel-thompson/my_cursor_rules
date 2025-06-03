@@ -1,6 +1,6 @@
 # My Cursor Rules
 
-A repository to manage and share Cursor IDE rules across different projects.
+A repository to manage and share Cursor IDE and Windsurf rules across different projects.
 
 ## Setup
 
@@ -46,10 +46,17 @@ source ~/.bashrc  # or source ~/.zshrc
 
 Now you can use:
 ```bash
-crget -list         # List available rules in repo
-crget my-rule.mdc   # Copy rule to current project
-crput -list         # List rules in current project
-crput my-rule.mdc   # Copy rule to repo
+# Cursor rules
+crget -list         # List available cursor rules in repo
+crget my-rule.mdc   # Copy cursor rule to current project
+crput -list         # List cursor rules in current project
+crput my-rule.mdc   # Copy cursor rule to repo
+
+# Windsurf rules
+crget -w -list      # List available windsurf rules in repo
+crget -w rule.md    # Copy windsurf rule to current project
+crput -w -list      # List windsurf rules in current project
+crput -w rule.md    # Copy windsurf rule to repo
 ```
 
 Tab completion will work with both the full script names and the aliases.
@@ -61,16 +68,24 @@ Tab completion will work with both the full script names and the aliases.
 Use `copy-to-project.sh` to copy rules from this repository to another project:
 
 ```bash
-# List available rules in the repository
+# Cursor Rules
+# List available cursor rules in the repository
 ./copy-to-project.sh -list
 
-# Copy a specific rule to your current project
+# Copy a specific cursor rule to your current project
 ./copy-to-project.sh my-rule.mdc
+
+# Windsurf Rules
+# List available windsurf rules in the repository
+./copy-to-project.sh -w -list
+
+# Copy a specific windsurf rule to your current project
+./copy-to-project.sh -w rule.md
 ```
 
 The script will:
-- Create the `.cursor/rules` directory if it doesn't exist (with your permission)
-- Validate the file extension (.mdc)
+- Create the `.cursor/rules` directory for cursor rules or `.windsurf/rules` directory for windsurf rules if it doesn't exist (with your permission)
+- Validate the file extension (.mdc for cursor rules, .md for windsurf rules)
 - Ask for confirmation before overwriting existing rules
 - Copy the rule to your project
 
@@ -79,16 +94,24 @@ The script will:
 Use `copy-to-repo.sh` to copy rules from a project back to this repository:
 
 ```bash
-# List available rules in your current project
+# Cursor Rules
+# List available cursor rules in your current project
 ./copy-to-repo.sh -list
 
-# Copy a specific rule to the repository
+# Copy a specific cursor rule to the repository
 ./copy-to-repo.sh my-rule.mdc
+
+# Windsurf Rules
+# List available windsurf rules in your current project
+./copy-to-repo.sh -w -list
+
+# Copy a specific windsurf rule to the repository
+./copy-to-repo.sh -w rule.md
 ```
 
 The script will:
 - Check if the rule exists in your project
-- Validate the file extension (.mdc)
+- Validate the file extension (.mdc for cursor rules, .md for windsurf rules)
 - Ask for confirmation before overwriting existing rules
 - Copy the rule to this repository
 
@@ -96,6 +119,7 @@ The script will:
 
 Currently supported file extensions:
 - `.mdc` (Cursor rule files)
+- `.md` (Windsurf rule files)
 
 ## Error Handling
 
