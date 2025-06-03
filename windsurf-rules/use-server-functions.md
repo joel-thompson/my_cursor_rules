@@ -1,9 +1,9 @@
 ---
 trigger: model_decision
 description: use server functions for any api needs
-globs: 
 ---
-Anytime we need to create an api endpoint to allow some backend action from the frontend, use a server function. Store them in `src\server\actions`
+
+Anytime we need to create an api endpoint to allow some mutation backend action from the frontend, use a server function. Store them in `src\server\actions`
 
 ex:
 
@@ -25,3 +25,5 @@ function EmptyNote() {
   <button onClick={() => createNote()} />
 }
 ```
+
+IMPORTANT: This should only be used for POST type server actions (ex adding something to a database). 
