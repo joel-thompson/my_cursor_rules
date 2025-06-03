@@ -54,6 +54,9 @@ _copy_to_project_completion() {
                 opts="$opts $(basename "$file")"
             done < <(find "${pathToMyCursorRules}windsurf-rules" -type f -name "*.md" -print0 2>/dev/null)
         fi
+        # Return early to avoid including cursor rules
+        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+        return 0
     fi
 
     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
@@ -102,6 +105,9 @@ _copy_to_repo_completion() {
                 opts="$opts $(basename "$file")"
             done < <(find ".windsurf/rules" -type f -name "*.md" -print0 2>/dev/null)
         fi
+        # Return early to avoid including cursor rules
+        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+        return 0
     fi
 
     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
