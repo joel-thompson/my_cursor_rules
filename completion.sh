@@ -10,18 +10,50 @@ if [ -f "$CONFIG_FILE" ]; then
 fi
 
 _copy_to_project_completion() {
-    local cur prev opts
+    local cur prev opts windsurfMode
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="-list"
+    opts="-list -w"
+    windsurfMode=false
+
+    # Check if -w flag was used anywhere in the command
+    for ((i=1; i < COMP_CWORD; i++)); do
+        if [[ "${COMP_WORDS[i]}" == "-w" ]]; then
+            windsurfMode=true
+            break
+        fi
+    done
 
     # If we have a valid repository path
-    if [ -n "$pathToMyCursorRules" ] && [ -d "${pathToMyCursorRules}rules" ]; then
-        # Add all .mdc files from the repository to the options
-        while IFS= read -r -d '' file; do
-            opts="$opts $(basename "$file")"
-        done < <(find "${pathToMyCursorRules}rules" -type f -name "*.mdc" -print0)
+    if [ -n "$pathToMyCursorRules" ]; then
+        if [ "$windsurfMode" = true ]; then
+            # Add windsurf rules path and extension
+            ruleDir="${pathToMyCursorRules}windsurf-rules"
+            extension="*.md"
+        else
+            # Default to cursor rules
+            ruleDir="${pathToMyCursorRules}rules"
+            extension="*.mdc"
+        fi
+
+        # Check if the directory exists
+        if [ -d "$ruleDir" ]; then
+            # Add all rule files from the repository to the options
+            while IFS= read -r -d '' file; do
+                opts="$opts $(basename "$file")"
+            done < <(find "$ruleDir" -type f -name "$extension" -print0 2>/dev/null)
+        fi
+    fi
+    
+    # If the previous word is -w, provide options suitable after -w flag
+    if [[ "$prev" == "-w" ]]; then
+        opts="-list"
+        if [ -d "${pathToMyCursorRules}windsurf-rules" ]; then
+            while IFS= read -r -d '' file; do
+                opts="$opts $(basename "$file")"
+            done < <(find "${pathToMyCursorRules}windsurf-rules" -type f -name "*.md" -print0 2>/dev/null)
+        fi
     fi
 
     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
@@ -29,18 +61,47 @@ _copy_to_project_completion() {
 }
 
 _copy_to_repo_completion() {
-    local cur prev opts
+    local cur prev opts windsurfMode
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="-list"
+    opts="-list -w"
+    windsurfMode=false
 
-    # If .cursor/rules exists in current directory
-    if [ -d ".cursor/rules" ]; then
-        # Add all .mdc files from the current project to the options
+    # Check if -w flag was used anywhere in the command
+    for ((i=1; i < COMP_CWORD; i++)); do
+        if [[ "${COMP_WORDS[i]}" == "-w" ]]; then
+            windsurfMode=true
+            break
+        fi
+    done
+
+    if [ "$windsurfMode" = true ]; then
+        # Windsurf rules
+        ruleDir=".windsurf/rules"
+        extension="*.md"
+    else
+        # Default to cursor rules
+        ruleDir=".cursor/rules"
+        extension="*.mdc"
+    fi
+
+    # If the rules directory exists in current directory
+    if [ -d "$ruleDir" ]; then
+        # Add all rule files from the current project to the options
         while IFS= read -r -d '' file; do
             opts="$opts $(basename "$file")"
-        done < <(find ".cursor/rules" -type f -name "*.mdc" -print0)
+        done < <(find "$ruleDir" -type f -name "$extension" -print0 2>/dev/null)
+    fi
+    
+    # If the previous word is -w, provide options suitable after -w flag
+    if [[ "$prev" == "-w" ]]; then
+        opts="-list"
+        if [ -d ".windsurf/rules" ]; then
+            while IFS= read -r -d '' file; do
+                opts="$opts $(basename "$file")"
+            done < <(find ".windsurf/rules" -type f -name "*.md" -print0 2>/dev/null)
+        fi
     fi
 
     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
@@ -51,4 +112,4 @@ _copy_to_repo_completion() {
 complete -F _copy_to_project_completion copy-to-project.sh
 complete -F _copy_to_project_completion crget
 complete -F _copy_to_repo_completion copy-to-repo.sh
-complete -F _copy_to_repo_completion crput 
+complete -F _copy_to_repo_completion crput

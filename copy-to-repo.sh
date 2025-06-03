@@ -25,29 +25,46 @@ if [ ! -d "$pathToMyCursorRules" ]; then
     exit 1
 fi
 
-# Check if rules directory exists
+# Default to cursor rules mode
+windsurfMode=false
+acceptedExtensions=(".mdc")
 rulesDir="${pathToMyCursorRules}rules"
-if [ ! -d "$rulesDir" ]; then
-    echo "Error: Rules directory not found at $rulesDir"
-    exit 1
+sourceDir=".cursor/rules"
+
+# Check for windsurf flag
+if [ "$1" = "-w" ]; then
+    windsurfMode=true
+    acceptedExtensions=(".md")
+    rulesDir="${pathToMyCursorRules}windsurf-rules"
+    sourceDir=".windsurf/rules"
+    shift # Remove the -w flag from the arguments
 fi
 
-# Array of accepted file extensions
-acceptedExtensions=(".mdc")
+# Check if rules directory exists
+if [ ! -d "$rulesDir" ]; then
+    # Create windsurf-rules directory if it doesn't exist
+    if [ "$windsurfMode" = true ]; then
+        mkdir -p "$rulesDir"
+        echo "Created windsurf rules directory at $rulesDir"
+    else
+        echo "Error: Rules directory not found at $rulesDir"
+        exit 1
+    fi
+fi
 
 # Function to list all local rule files
 list_rules() {
-    echo "Available local rule files:"
+    echo "Available local $([ "$windsurfMode" = true ] && echo "windsurf" || echo "cursor") rule files:"
     for ext in "${acceptedExtensions[@]}"; do
-        find ".cursor/rules" -type f -name "*$ext" -exec basename {} \; 2>/dev/null
+        find "$sourceDir" -type f -name "*$ext" -exec basename {} \; 2>/dev/null
     done
     exit 0
 }
 
 # Check for list parameter
 if [ "$1" = "-list" ]; then
-    if [ ! -d ".cursor/rules" ]; then
-        echo "Error: No .cursor/rules directory found in current project"
+    if [ ! -d "$sourceDir" ]; then
+        echo "Error: No $sourceDir directory found in current project"
         exit 1
     fi
     list_rules
@@ -56,19 +73,23 @@ fi
 # Check if a rule file name was provided
 if [ $# -eq 0 ]; then
     echo "Error: Please provide a rule file name"
-    echo "Usage: copy-to-repo.sh <rule-file-name> or copy-to-repo.sh -list"
+    if [ "$windsurfMode" = true ]; then
+        echo "Usage: copy-to-repo.sh -w <rule-file-name> or copy-to-repo.sh -w -list"
+    else
+        echo "Usage: copy-to-repo.sh <rule-file-name> or copy-to-repo.sh -list"
+        echo "For windsurf rules, use the -w flag: copy-to-repo.sh -w <rule-file-name>"
+    fi
     exit 1
 fi
 
 ruleFile="$1"
-sourceDir=".cursor/rules"
 sourceFile="${sourceDir}/${ruleFile}"
 targetFile="${rulesDir}/${ruleFile}"
 isOverwrite=false
 
-# Check if .cursor/rules exists in current project
+# Check if source directory exists in current project
 if [ ! -d "$sourceDir" ]; then
-    echo "Error: No .cursor/rules directory found in current project"
+    echo "Error: No $sourceDir directory found in current project"
     exit 1
 fi
 
@@ -82,7 +103,7 @@ for ext in "${acceptedExtensions[@]}"; do
 done
 
 if [ "$valid_extension" = false ]; then
-    echo "Error: Invalid file type. Accepted file types: ${acceptedExtensions[*]}"
+    echo "Error: Invalid file type. Accepted file types for $([ "$windsurfMode" = true ] && echo "windsurf" || echo "cursor") rules: ${acceptedExtensions[*]}"
     exit 1
 fi
 
@@ -120,7 +141,8 @@ if [[ $gitConfirm == [yY] ]]; then
     cd "$pathToMyCursorRules"
     
     # Add and commit the file
-    git add "rules/$ruleFile"
+    gitPath="$([ "$windsurfMode" = true ] && echo "windsurf-rules" || echo "rules")/$ruleFile"
+    git add "$gitPath"
     git commit -m "$commitMessage"
     
     # Push to current branch
