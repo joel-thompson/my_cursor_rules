@@ -1,8 +1,9 @@
 ---
 trigger: model_decision
-description: 
+description: When creating new functions
 globs: *.tsx,**/*.tsx
 ---
+
 Functions should use object parameters instead of positional parameters for better maintainability and readability.
 
 Quick Check:
