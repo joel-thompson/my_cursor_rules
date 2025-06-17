@@ -1,0 +1,67 @@
+---
+trigger: model_decision
+description: when adding new shadcn components
+---
+
+SHADCN/UI COMPONENT INSTALLATION GUIDE
+
+When installing shadcn/ui components, use the following format:
+pnpm dlx shadcn@latest add [component-command]
+
+COMPONENT LIST:
+- accordion: A vertically stacked set of interactive headings that each reveal a section of content
+- alert: Displays a callout for user attention with contextual feedback messages
+- alert-dialog: A modal dialog that interrupts the user with important content and expects a response
+- aspect-ratio: Displays content within a desired ratio container
+- avatar: An image element with a fallback for representing the user
+- badge: Displays a badge or label to highlight information
+- breadcrumb: Displays a navigation path to show the user's location in the app hierarchy
+- button: A clickable element that triggers an action
+- calendar: A date picker component for selecting dates
+- card: A container component with header, content, and footer sections
+- carousel: A slideshow component for cycling through elements
+- chart: Data visualization components for displaying charts and graphs
+- checkbox: A control that allows the user to toggle between checked and not checked
+- collapsible: An interactive component which expands/collapses a panel
+- combobox: An autocomplete input that allows users to filter a list of options
+- command: A command menu component for search and navigation
+- context-menu: Displays a menu on right-click with contextual actions
+- data-table: A powerful table component with sorting, filtering, and pagination
+- date-picker: A component for selecting a date from a calendar interface
+- dialog: A modal window overlaid on the primary content
+- drawer: A panel that slides out from the edge of the screen
+- dropdown-menu: A menu that displays a list of options on demand
+- form: Form components integrated with React Hook Form for validation and submission
+- hover-card: A card that appears when hovering over a trigger element
+- input: Displays a form input field or a component that looks like an input field
+- input-otp: An input component specifically designed for one-time passwords
+- label: A caption for form controls
+- menubar: A horizontal menu component typically used in application headers
+- navigation-menu: A collection of links for site navigation with dropdown support
+- pagination: Navigation component for splitting content across multiple pages
+- popover: A floating panel that appears above other content
+- progress: Displays an indicator showing the completion progress of a task
+- radio-group: A set of checkable buttons where only one can be selected at a time
+- resizable: Panels that can be resized by dragging their borders
+- scroll-area: A custom scrollable container with styled scrollbars
+- select: A control for selecting a value from a list of options
+- separator: A visual divider between sections of content
+- sheet: A dialog that slides in from the edge of the screen
+- sidebar: A vertical navigation component for side panels
+- skeleton: A placeholder component used while content is loading
+- slider: An input control for selecting a numeric value within a range
+- sonner: A toast notification component for displaying temporary messages
+- switch: A toggle control for binary on/off states
+- table: A basic table component for displaying tabular data
+- tabs: A component for organizing content into separate views
+- textarea: A multi-line text input control
+- toast: A notification component that displays brief messages
+- toggle: A button that can be toggled between two states
+- toggle-group: A group of toggle buttons where multiple can be selected
+- tooltip: A popup that displays information when hovering over an element
+- typography: Pre-styled typography components for consistent text styling
+
+EXAMPLES:
+- To install button: pnpm dlx shadcn@latest add button
+- To install dialog: pnpm dlx shadcn@latest add dialog
+- To install date-picker: pnpm dlx shadcn@latest add date-picker
